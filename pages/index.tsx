@@ -1,24 +1,39 @@
-import { GetStaticProps } from "next"
-import { Box, Container, Heading, Center, Spinner } from "@chakra-ui/react"
-import { useQuery } from "@apollo/client"
 import { useState } from "react"
+import { GetStaticProps } from "next"
+import { Box, Container, Heading, Center, Spinner, useToast } from "@chakra-ui/react"
+import { useQuery } from "@apollo/client"
 import { initializeApollo } from "src/config/apolloClient"
 import { PAGE_QUERY } from "src/config/querys"
 
-// Components
+// Components >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 import Characters from "src/components/Characters"
 import SearchInput from "src/components/SearchInput"
 import PagesNumber from "src/components/PagesNumber"
 
+// Rendering Function >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 export default function Home(props) {
-   const [characters, setCharacters] = useState(props.characters)
-   const [load, setLoad] = useState(false)
    const [currentPage, setCurrentPage] = useState(props.info.next - 1)
+   const [characters, setCharacters] = useState(props.characters)
    const [info, setInfo] = useState(props.info)
+   const [load, setLoad] = useState(false)
 
    // Apollo state query
    // variables the page number
    const { data, error, loading, fetchMore } = useQuery(PAGE_QUERY, { variables: { page: +currentPage } })
+
+   // Chakra-ui Toast
+   // Tost display if error is true
+   const toast = useToast()
+   if (error) {
+      console.log(error)
+      toast({
+         position: "top-left",
+         description: "Internal Error Please Try Again",
+         status: "error",
+         duration: 5000,
+         isClosable: true,
+      })
+   }
 
    // Fetch Page Dtata
    // Function Called on Next and Prev Buttons

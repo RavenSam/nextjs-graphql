@@ -2,13 +2,20 @@ import { Button, Center, IconButton } from "@chakra-ui/react"
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons"
 
 export default function PagesNumber({ info, fetchPage, p }) {
+   //   Next & Previous page Number
    const { next, prev } = info
 
+   // Function to handle the Next Button
+   // funtion set the current page
+   // call fetchPage with next page number
    const handleNext = () => {
       p.setCurrentPage(p.currentPage + 1)
       fetchPage(next)
    }
 
+   // Function to handle the Previous Button
+   // funtion set the current page
+   // call fetchPage with prev page number
    const handlePrev = () => {
       p.setCurrentPage(p.currentPage - 1)
       fetchPage(prev)
