@@ -62,6 +62,10 @@ export default function Home(props) {
    // Remove the search results
    // Render the page results data
    const charDefault = () => setCharacters(data.characters.results)
+   
+   // Loading new page
+   // Not loading in first page
+   const loadingNew = +currentPage !== 1 ? loading : false
 
    return (
       <>
@@ -74,7 +78,7 @@ export default function Home(props) {
 
             <SearchInput charDefault={charDefault} setCharacters={setCharacters} setLoading={setLoad} />
 
-            {loading || load ? (
+            {loadingNew || load ? (
                <Center py="3rem">
                   <Spinner />
                </Center>
