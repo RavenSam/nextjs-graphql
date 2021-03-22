@@ -1,5 +1,5 @@
-import { GetStaticProps, GetServerSideProps } from "next"
-import { Box, Container, Heading } from "@chakra-ui/react"
+import { GetStaticProps } from "next"
+import { Box, Container, Heading, Center, Spinner } from "@chakra-ui/react"
 import { gql, useQuery } from "@apollo/client"
 import { useState } from "react"
 import { initializeApollo } from "src/config/apolloClient"
@@ -47,10 +47,27 @@ export default function Home(props) {
    const initialState = props
    const [characters, setCharacters] = useState(initialState.characters)
    const [load, setLoad] = useState(false)
+   const [currentPage, setCurrentPage] = useState(props.info.next - 1)
+   const [info, setInfo] = useState(props.info)
 
-   const { data, error, loading } = useQuery(pageQuery, { variables: { page: 2 } })
+   const { data, error, loading, fetchMore } = useQuery(pageQuery, { variables: { page: +currentPage } })
 
-   console.log({ data, error, loading })
+   const fetchPage = (page) => {
+      fetchMore({
+         variables: { page: +page || 1 },
+         updateQuery: (prevResult, { fetchMoreResult }) => {
+            fetchMoreResult.characters = {
+               ...prevResult.characters,
+               ...fetchMoreResult.characters,
+            }
+
+            setCharacters(fetchMoreResult.characters.results)
+            setInfo(fetchMoreResult.characters.info)
+         },
+      })
+
+      window.scrollTo(0, 0)
+   }
 
    const charDefault = () => setCharacters(initialState.characters)
 
@@ -64,10 +81,15 @@ export default function Home(props) {
             </Box>
 
             <SearchInput charDefault={charDefault} setCharacters={setCharacters} setLoading={setLoad} />
+            {loading || load ? (
+               <Center py="3rem">
+                  <Spinner />
+               </Center>
+            ) : (
+               <Characters characters={characters} />
+            )}
 
-            <Characters characters={characters} loading={load} />
-
-            <PagesNumber info={props.info} />
+            <PagesNumber info={info} fetchPage={fetchPage} p={{ currentPage, setCurrentPage }} />
          </Container>
       </>
    )

@@ -1,22 +1,17 @@
-import { useState } from "react"
-import { useRouter } from "next/router"
 import { Button, Spacer, HStack, Center, IconButton } from "@chakra-ui/react"
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons"
 
-export default function PagesNumber({ info }) {
+export default function PagesNumber({ info, fetchPage, p }) {
    const { next, prev, pages } = info
-   const [currentPage, setCurrentPage] = useState(next - 1)
-
-   const router = useRouter()
 
    const handleNext = () => {
-      setCurrentPage(currentPage + 1)
-      router.push({ pathname: "/", query: { page: currentPage + 1 } })
+      p.setCurrentPage(p.currentPage + 1)
+      fetchPage(next)
    }
 
    const handlePrev = () => {
-      setCurrentPage(currentPage - 1)
-      router.push({ pathname: "/", query: { page: currentPage - 1 } })
+      p.setCurrentPage(p.currentPage - 1)
+      fetchPage(prev)
    }
 
    return (
@@ -31,7 +26,7 @@ export default function PagesNumber({ info }) {
                isDisabled={!prev}
             />
 
-            <Button borderRadius="full">{currentPage}</Button>
+            <Button borderRadius="full">{p.currentPage}</Button>
 
             <IconButton
                onClick={handleNext}
