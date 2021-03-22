@@ -1,38 +1,6 @@
-import { ApolloClient, InMemoryCache, gql } from "@apollo/client"
 import type { NextApiRequest, NextApiResponse } from "next"
 import { initializeApollo } from "src/config/apolloClient"
-
-const searchQuery = gql`
-   query SearchCharacter($search: String!) {
-      characters(filter: { name: $search }) {
-         info {
-            count
-            pages
-         }
-         results {
-            id
-            name
-
-            location {
-               id
-               name
-            }
-
-            origin {
-               id
-               name
-            }
-
-            episode {
-               id
-               episode
-               air_date
-            }
-            image
-         }
-      }
-   }
-`
+import { SEARCH_QUERY } from "src/config/querys"
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
    const apolloClient = initializeApollo()
@@ -40,7 +8,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
    try {
       const { data } = await apolloClient.query({
-         query: searchQuery,
+         query: SEARCH_QUERY,
          variables: { search },
       })
 

@@ -1,13 +1,13 @@
 import React from "react"
 import Image from "next/image"
-import { Box, Heading, SimpleGrid, Text, Spinner, Center } from "@chakra-ui/react"
+import { Box, Heading, SimpleGrid, Text } from "@chakra-ui/react"
 
 export default function Characters({ characters = [] }) {
    return (
       <>
          <SimpleGrid columns={[1, 2, 3, 4]} spacing={4}>
             {characters.map((character) => (
-               <Box key={character.id} boxShadow="s3" borderRadius="xl" overflow="hidden">
+               <Box key={character.id} boxShadow="s3" borderRadius="xl" overflow="hidden" className="card">
                   <Image src={character.image} width={450} height={400} />
 
                   <Box p="1rem .8rem">
@@ -25,6 +25,15 @@ export default function Characters({ characters = [] }) {
                </Box>
             ))}
          </SimpleGrid>
+
+         <style>{`
+         .card img{
+            transition:transform .5s ease;
+         }
+         .card:hover img{
+            transform:scale(1.1);
+         }
+         `}</style>
       </>
    )
 }

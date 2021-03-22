@@ -1,8 +1,8 @@
-import { Button, Spacer, HStack, Center, IconButton } from "@chakra-ui/react"
+import { Button, Center, IconButton } from "@chakra-ui/react"
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons"
 
 export default function PagesNumber({ info, fetchPage, p }) {
-   const { next, prev, pages } = info
+   const { next, prev } = info
 
    const handleNext = () => {
       p.setCurrentPage(p.currentPage + 1)
@@ -26,7 +26,9 @@ export default function PagesNumber({ info, fetchPage, p }) {
                isDisabled={!prev}
             />
 
-            <Button borderRadius="full">{p.currentPage}</Button>
+            <Button borderRadius="full" px="1.5rem">
+               {p.currentPage}
+            </Button>
 
             <IconButton
                onClick={handleNext}
